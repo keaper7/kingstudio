@@ -178,9 +178,8 @@
       </div>
 
       <div class="zone__body">
-        <p class="zone__idx">01</p>
-        <h3 class="zone__name">Классический зал</h3>
         <p class="zone__size">8 × 5 м</p>
+        <h3 class="zone__name">Классический зал</h3>
         <p class="zone__desc">
           Молдинги, каскадная люстра, фреска с деревьями в арке и паркет-ёлочка.
           Классика, в которую вплетено современное. Наш самый сложный ремонт
@@ -189,6 +188,18 @@
         <ul class="zone__tags">
           <li>Классика</li><li>Свадебные</li><li>Семейные</li>
         </ul>
+        <div class="zone__mark" data-thread-block>
+          <svg class="zone__num" viewBox="0 0 220 132" aria-hidden="true" focusable="false">
+            <text x="110" y="106" text-anchor="middle">01</text>
+          </svg>
+          <button class="zone__all" type="button" data-i="0"
+                  aria-label="Открыть галерею: Классический зал, 10 кадров">
+            <span>Смотреть все 10 кадров</span>
+            <svg viewBox="0 0 44 8" aria-hidden="true" focusable="false">
+              <path d="M0 4 H40 M34 1 L40 4 L34 7"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </article>
 
@@ -206,9 +217,8 @@
       </div>
 
       <div class="zone__body">
-        <p class="zone__idx">02</p>
-        <h3 class="zone__name">Дофаминовая зона</h3>
         <p class="zone__size">4 × 6 м</p>
+        <h3 class="zone__name">Дофаминовая зона</h3>
         <p class="zone__desc">
           Бумажные фонари, ретро-постеры, комод середины века и лампа-гриб.
           Цветной свет здесь сделали мягче и нейтральнее — но радовать глаз
@@ -217,6 +227,18 @@
         <ul class="zone__tags">
           <li>Ретро</li><li>Lifestyle</li><li>Контент</li>
         </ul>
+        <div class="zone__mark" data-thread-block>
+          <svg class="zone__num" viewBox="0 0 220 132" aria-hidden="true" focusable="false">
+            <text x="110" y="106" text-anchor="middle">02</text>
+          </svg>
+          <button class="zone__all" type="button" data-i="0"
+                  aria-label="Открыть галерею: Дофаминовая зона, 7 кадров">
+            <span>Смотреть все 7 кадров</span>
+            <svg viewBox="0 0 44 8" aria-hidden="true" focusable="false">
+              <path d="M0 4 H40 M34 1 L40 4 L34 7"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </article>
 
@@ -233,9 +255,8 @@
       </div>
 
       <div class="zone__body">
-        <p class="zone__idx">03</p>
-        <h3 class="zone__name">Циклорама</h3>
         <p class="zone__size">5 × 3,5 м</p>
+        <h3 class="zone__name">Циклорама</h3>
         <p class="zone__desc">
           Белая угловая циклорама — единственная зона с естественным светом.
           Угол позволяет снимать видео, а размеров хватает на групповые кадры.
@@ -244,6 +265,18 @@
         <ul class="zone__tags">
           <li>Естественный свет</li><li>Видео</li><li>Групповые</li>
         </ul>
+        <div class="zone__mark" data-thread-block>
+          <svg class="zone__num" viewBox="0 0 220 132" aria-hidden="true" focusable="false">
+            <text x="110" y="106" text-anchor="middle">03</text>
+          </svg>
+          <button class="zone__all" type="button" data-i="0"
+                  aria-label="Открыть галерею: Циклорама, 3 кадра">
+            <span>Смотреть все 3 кадра</span>
+            <svg viewBox="0 0 44 8" aria-hidden="true" focusable="false">
+              <path d="M0 4 H40 M34 1 L40 4 L34 7"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </article>
 
@@ -512,8 +545,20 @@
       <ul class="contacts__hints">
         <li>Здание <strong>Gt</strong> — в нём автомойка и типография</li>
         <li>Вход через стеклянную дверь, <strong>второй этаж</strong></li>
-        <li>Яндекс Такси привозит прямо к нам</li>
       </ul>
+
+      <!-- Карта приходит без своей метки (никакого &pt=): её рисует
+           .contacts__pin ниже. Растровая метка Яндекса мылилась, потому
+           что без ключа сервис отдаёт максимум 650 px по ширине и
+           игнорирует scale, а блок был шире. Своя метка векторная —
+           резкая на любом экране и в цвет бренда. -->
+      <a class="contacts__map" href="https://yandex.ru/maps/?text=Нальчик%2C%20улица%20Тарчокова%2C%20121"
+         target="_blank" rel="noopener" aria-label="Открыть адрес студии на Яндекс Картах в новой вкладке">
+        <img src="https://static-maps.yandex.ru/1.x/?ll=43.568246,43.483656&z=17&l=map&size=650,450"
+             alt="Карта: ул. Тарчокова, 121, Нальчик" loading="lazy" width="650" height="450">
+        <span class="contacts__pin" aria-hidden="true"></span>
+        <span class="contacts__maplink">Открыть в Яндекс Картах</span>
+      </a>
     </div>
 
     <div class="contacts__col rv">
@@ -567,6 +612,7 @@
     <p class="ftr__by">Дизайн и разработка — <a href="https://sevensites.ru" target="_blank" rel="noopener">SEVEN</a></p>
   </div>
 </footer>
+
 
 <!-- ══ ЛАЙТБОКС ════════════════════════════════════════ -->
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Галерея локации" hidden>

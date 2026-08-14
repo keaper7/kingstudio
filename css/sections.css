@@ -153,16 +153,20 @@
   display: grid;
   grid-template-columns: 1.2fr .8fr;
   gap: clamp(24px, 4vw, 72px);
-  /* start, а не center: у дофаминовой зоны портретный кадр заметно выше
-     текстового блока, и центрирование подвешивало текст в пустоте
-     посередине длинного скролла. Сверху текст читается сразу у кадра. */
-  align-items: start;
+  /* stretch, чтобы текстовая колонка знала высоту кадра: тогда блок с
+     номером внизу неё встаёт вровень с нижним краем снимка. Сам текст
+     всё равно прижат к верху — колонка выложена флексом. */
+  align-items: stretch;
 }
+.zone__body { display: flex; flex-direction: column; }
 .zone--tall { grid-template-columns: .78fr 1.22fr; }
 
 /* портретный кадр не должен раздуваться линейно с шириной широкой колонки —
-   на десктопе это превращало один снимок в полтора экрана скролла */
-.zone--tall .zone__open .ph { max-height: 78vh; }
+   на десктопе это превращало один снимок в полтора экрана скролла. Только
+   vh мало: на высоком экране (например 1500×1300) 78vh даёт 1014px кадра
+   против ~430px текста рядом — под тегами зияла пустота под 600px.
+   Верхний предел в пикселях держит колонки соразмерными на любой высоте. */
+.zone--tall .zone__open .ph { max-height: min(78vh, 640px); }
 
 /* чередование: у второй зоны кадр справа */
 .zone--flip .zone__media { order: 2; }
@@ -217,30 +221,85 @@
   pointer-events: none;
 }
 
-.zone__idx {
-  font-size: var(--micro); font-weight: 500;
-  letter-spacing: .24em;
-  color: var(--dim);
-  padding-bottom: 12px;
-  margin-bottom: 16px;
-  border-bottom: 1px solid var(--hair);
-  max-width: 3.4em;
+/* ══ Номер зоны в пустоте ══
+   Под описанием оставался мёртвый угол — у дофаминовой зоны 728 × 680,
+   самое большое пустое место на странице. Занимаем его номером зоны:
+   контур обводится тем же светом, что и нить, по мере появления блока,
+   и рядом появляется вход в галерею именно этой зоны. Пустота становится
+   композицией, а не остатком. */
+
+.zone__mark {
+  margin-top: auto;           /* прижимаем к низу колонки, вровень с кадром */
+  padding-top: clamp(28px, 4vw, 60px);
 }
+
+.zone__num {
+  display: block;
+  width: min(100%, 460px);
+  height: auto;
+  margin-bottom: clamp(14px, 2vw, 26px);
+  overflow: visible;
+}
+.zone__num text {
+  font-family: var(--ff);
+  font-weight: 300;
+  font-size: 118px;
+  letter-spacing: -.04em;
+  fill: none;
+  stroke: var(--greige);
+  stroke-width: 1.1;
+  paint-order: stroke;
+  filter: drop-shadow(0 0 4px rgba(192, 160, 104, .45));
+}
+
+/* Обводка рисуется, а не проявляется. Прятать имеет право только рабочий
+   скрипт: .has-rv ставит main.js, и если он не отработал, цифра просто
+   видна целиком. Длина штриха с запасом — контур двух цифр короче. */
+.has-rv .zone__num text { stroke-dasharray: 2000; stroke-dashoffset: 2000; }
+.has-rv .zone.is-in .zone__num text {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 2.2s var(--ease);
+}
+
+.zone__all {
+  display: inline-flex; align-items: center; gap: 14px;
+  font-size: var(--micro); font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--dim);
+  padding: 0;
+  transition: color .3s var(--ease);
+}
+.zone__all svg {
+  width: 44px; height: 8px;
+  fill: none; stroke: currentColor; stroke-width: 1;
+  transition: transform .35s var(--ease);
+}
+.zone__all:hover { color: var(--espresso); }
+.zone__all:hover svg { transform: translateX(8px); }
 
 .zone__name {
   font-size: clamp(24px, 3vw, 42px);
   font-weight: 400;
   letter-spacing: -.02em;
-  margin-bottom: 8px;
+  margin-bottom: 14px;
 }
 
-/* без uppercase: «8 × 5 м» — единица измерения, а не рубрика,
-   капитель превращала бы её в «8 × 5 М» */
+/* Раньше здесь же, отдельной строкой над названием, стояла порядковая
+   «01» — но с большой контурной цифрой внизу карточки (.zone__num) это
+   дублировало то же самое дважды. Метраж встал на её место: тот же ритм
+   капители с подчёркиванием, но живой факт вместо филлера, и нигде
+   больше на карточке не повторяется. width: max-content — линия ровно
+   по ширине текста, а не во всю колонку, для любой длины числа.
+   Без uppercase: «8 × 5 м» — единица измерения, а не рубрика,
+   капитель превращала бы её в «8 × 5 М». */
 .zone__size {
   font-size: var(--micro); font-weight: 500;
   letter-spacing: .18em;
   color: var(--dim);
-  margin-bottom: 18px;
+  width: max-content;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--hair);
 }
 
 .zone__desc { color: var(--dim); max-width: 46ch; }
@@ -432,6 +491,63 @@
 }
 .contacts__hints strong { color: var(--fg); font-weight: 500; }
 
+/* Карта — статичное изображение Яндекса, а не интерактивный фрейм: у неё
+   свой скролл-зум, и на странице с длинным вертикальным скроллом это
+   постоянно перехватывало бы прокрутку под курсором. Картинка не
+   перехватывает ничего; клик открывает настоящую интерактивную карту
+   в новой вкладке — там зум и маршрут уместны. */
+/* Полосой, а не панно: карта здесь — ориентир, а не главный экспонат.
+   Высота задана явно, картинка кроется по центру (точка адреса — центр
+   изображения, поэтому кроп её не уводит), и заодно кадр приходит
+   уменьшенным, а не растянутым — так он остаётся резким. */
+.contacts__map {
+  position: relative;
+  display: block;
+  margin-top: 26px;
+  height: clamp(170px, 22vw, 250px);
+  /* 650 px — предел, который сервис отдаёт без ключа. Шире блок делать
+     нельзя: картинку начнёт растягивать, и карта поплывёт. */
+  max-width: 650px;
+  border: 1px solid var(--hair);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.contacts__map img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover;
+  filter: saturate(.72) brightness(.99);
+  transition: transform .6s var(--ease), filter .4s var(--ease);
+}
+.contacts__map:hover img { transform: scale(1.05); filter: saturate(.9) brightness(1.03); }
+
+/* Метка — ровно в центре кадра, потому что карта отцентрована по адресу.
+   Светлый ободок обязателен: золото само по себе тонет в бежевой карте,
+   а кольцо цвета айвори отрезает метку от любой подложки под ней. */
+.contacts__pin {
+  position: absolute; left: 50%; top: 50%;
+  width: 16px; height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2.5px solid var(--ivory);
+  box-shadow:
+    0 0 0 5px rgba(192, 160, 104, .30),
+    0 2px 10px rgba(30, 24, 20, .5);
+  pointer-events: none;
+}
+
+.contacts__maplink {
+  position: absolute; left: 14px; bottom: 14px;
+  padding: 9px 16px;
+  font-size: 12px; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase;
+  background: rgba(46, 38, 32, .78);
+  color: var(--ivory);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
 .contacts__links { margin-bottom: 22px; }
 .contacts__links li { border-bottom: 1px solid var(--hair); }
 .contacts__links a {
@@ -617,6 +733,68 @@
 .ftr__note { font-size: 12px; color: rgba(244, 239, 230, .62); }
 .ftr__by { font-size: 12px; color: rgba(244, 239, 230, .62); }
 .ftr__by a { color: var(--gold); border-bottom: 1px solid currentColor; }
+
+
+/* ══ НИТЬ ══
+   Линия идёт вниз через пустоты вёрстки — прежде всего через незанятые
+   углы под текстом зон — рисуется по мере скролла и ставит узел у рубрики
+   каждого раздела. Заодно показывает, где ты и сколько осталось.
+
+   Маршрут считает скрипт: он зависит от реальных пустот, а те зависят от
+   высот кадров и длины текста. Поэтому здесь только оформление, а сам
+   <svg> создаётся в main.js — без скрипта элемента просто нет.
+   Декорация не имеет права оставить страницу сломанной. */
+
+.thread {
+  position: absolute;
+  top: 0; left: 0;
+  /* Ключевой слой: 0 — выше фонов секций, но ниже контента, который ниже
+     поднят на 1. Иначе линия шла бы поверх текста и кадров. Так она видна
+     ровно там, где пусто, и ныряет за кадр, где место занято. */
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* Контент над нитью. Поднимаем содержимое секций, а не сами секции: у них
+   непрозрачный фон, и он закрыл бы линию целиком. Шапка (40) и лайтбокс
+   (90) и так выше. */
+.sec > *,
+.hero,
+.band,
+.ftr > * { position: relative; z-index: 1; }
+
+/* pathLength="1" нормирует длину: dashoffset читается как «1 − прогресс»
+   и не зависит от того, насколько длинной вышла кривая на этой странице */
+/* pathLength="1" нормирует длину: dashoffset читается как «1 − прогресс»
+   и не зависит от того, какой длины вышел отрезок на этой странице */
+.thread__path {
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+}
+
+/* Свечение — два ореола разного радиуса: ближний даёт линии плотность,
+   дальний — мягкий рассеянный свет.
+
+   Фильтр висит на каждом отрезке, а не на общей группе. Область пересчёта
+   у фильтра — габарит элемента, а группа тянется во весь документ: любая
+   правка внутри неё заставляла бы браузер пересобирать ореол на всю эту
+   высоту на каждом кадре скролла. У отрезка габарит с одну секцию. */
+.thread__path,
+.thread__node {
+  filter: drop-shadow(0 0 3px rgba(192, 160, 104, .55))
+          drop-shadow(0 0 9px rgba(192, 160, 104, .30));
+}
+
+.thread__node {
+  stroke-width: 1.4;
+  opacity: 0;
+  transform: scale(.35);
+  transition: opacity .55s var(--ease), transform .55s var(--ease);
+}
+.thread__node.is-on { opacity: 1; transform: none; }
 
 
 /* ══ ЛАЙТБОКС ══ */

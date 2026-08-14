@@ -79,6 +79,12 @@
   .zone--flip .zone__media { order: 0; }
   .zones { gap: clamp(48px, 12vw, 72px); }
 
+  /* в одну колонку пустоты под текстом нет — номер больше ничего не
+     заполняет и только отодвигал бы следующую зону. Вход в галерею
+     остаётся: на телефоне он нужнее всего. */
+  .zone__num { display: none; }
+  .zone__mark { padding-top: 22px; }
+
   /* вертикальный кадр во всю ширину телефона занимал бы полтора экрана */
   .zone--tall .ph--tall { aspect-ratio: 4 / 5; }
   .about__media .ph--43 { aspect-ratio: 3 / 2; }
@@ -91,6 +97,10 @@
 
   .lb__nav { width: 44px; height: 44px; font-size: 26px; }
   .lb__stage img, .lb__stage .ph { max-height: 66svh; }
+
+  /* поля схлопнулись до 20px — вести нить негде. Скрипт её здесь и не
+     строит; правило страхует момент между сменой ширины и пересборкой. */
+  .thread { display: none; }
 }
 
 

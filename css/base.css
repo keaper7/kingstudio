@@ -211,7 +211,8 @@ h1, h2, h3, h4 { font-weight: 500; line-height: 1.1; letter-spacing: -.01em; }
   transition-delay: calc(var(--i, 0) * 60ms);
 }
 .has-rv .kit__list.is-in > li,
-.has-rv .price.is-in .price__row {
+.has-rv .price.is-in .price__row,
+.has-rv .mate__price.is-in .price__row {
   opacity: 1; transform: none;
 }
 
