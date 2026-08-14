@@ -1,0 +1,676 @@
+/* ══════════════════════════════════════════════════════
+   KING STUDIO — секции
+   ══════════════════════════════════════════════════════ */
+
+/* ══ ШАПКА ══ */
+
+.hdr {
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; gap: clamp(16px, 3vw, 40px);
+  height: var(--hdr-h);
+  padding: 0 var(--pad);
+  background: rgba(244, 239, 230, .88);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  border-bottom: 1px solid rgba(46, 38, 32, .1);
+}
+
+.hdr__logo {
+  font-size: 15px; font-weight: 500;
+  letter-spacing: .2em;
+  white-space: nowrap;
+}
+
+.hdr__nav { display: flex; gap: clamp(14px, 2vw, 30px); margin-left: auto; }
+.hdr__nav a {
+  font-size: 13px; letter-spacing: .04em; color: rgba(46, 38, 32, .68);
+  transition: color .25s var(--ease);
+}
+.hdr__nav a:hover { color: var(--espresso); }
+
+.hdr__burger { display: none; }
+
+
+/* ══ 00 · ГЕРОЙ ══ */
+
+.hero {
+  position: relative;
+  min-height: calc(100svh - var(--hdr-h));
+  display: flex; align-items: flex-end;
+  padding: clamp(60px, 12vh, 140px) var(--pad) clamp(56px, 9vh, 96px);
+  overflow: hidden;
+  background: var(--cream);
+}
+
+.hero__media { position: absolute; inset: 0; }
+.hero__ph { width: 100%; height: 100%; border: 0; }
+/* .ph.is-set в base.css задаёт height:auto той же специфичностью (2 класса);
+   здесь нужен явный фулл-фрейм, а не пропорция кадра — держим 100% сильнее */
+.ph.hero__ph.is-set { height: 100%; }
+
+/* затемнение снизу: текст лежит на кадре и обязан читаться
+   независимо от того, какой кадр туда встанет */
+.hero__media::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(30, 24, 20, .82) 0%,
+    rgba(30, 24, 20, .58) 32%,
+    rgba(30, 24, 20, .18) 62%,
+    rgba(30, 24, 20, .06) 100%);
+}
+
+.hero__inner { position: relative; max-width: 60ch; color: var(--ivory); }
+
+.hero__kicker {
+  font-size: var(--micro); font-weight: 500;
+  letter-spacing: .28em; text-transform: uppercase;
+  color: rgba(244, 239, 230, .72);
+  margin-bottom: clamp(14px, 2vw, 22px);
+}
+
+.hero__title {
+  font-size: clamp(40px, 9vw, 124px);
+  font-weight: 300;
+  letter-spacing: .06em;
+  line-height: .98;
+  margin-bottom: clamp(14px, 2vw, 24px);
+}
+
+.hero__slogan {
+  font-size: clamp(18px, 2.2vw, 30px);
+  font-weight: 300;
+  color: var(--ivory);
+  margin-bottom: clamp(12px, 1.6vw, 18px);
+}
+
+.hero__sub {
+  font-size: clamp(15px, 1.15vw, 18px);
+  line-height: 1.6;
+  color: rgba(244, 239, 230, .82);
+  max-width: 48ch;
+  margin-bottom: clamp(26px, 3.5vw, 40px);
+}
+
+.hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero__actions .btn--solid { background: var(--ivory); border-color: var(--ivory); color: var(--espresso); }
+.hero__actions .btn--solid:hover { background: transparent; color: var(--ivory); }
+.hero__actions .btn--ghost { color: var(--ivory); border-color: rgba(244, 239, 230, .5); }
+.hero__actions .btn--ghost:hover { background: var(--ivory); color: var(--espresso); border-color: var(--ivory); }
+
+.hero__scroll {
+  position: absolute; right: var(--pad); bottom: clamp(56px, 9vh, 96px);
+  width: 1px; height: clamp(40px, 7vh, 72px);
+  background: rgba(244, 239, 230, .35);
+  overflow: hidden;
+}
+.hero__scroll span {
+  position: absolute; inset: 0;
+  background: var(--ivory);
+  animation: heroScroll 2.4s var(--ease) infinite;
+}
+@keyframes heroScroll {
+  0%   { transform: translateY(-100%); }
+  60%  { transform: translateY(100%); }
+  100% { transform: translateY(100%); }
+}
+
+
+/* ══ 01 · О СТУДИИ ══ */
+
+.about__grid {
+  display: grid;
+  grid-template-columns: 1.35fr .95fr;
+  gap: clamp(28px, 5vw, 80px);
+  align-items: start;
+}
+.about__p { margin-top: 20px; max-width: 58ch; }
+.about__sign {
+  margin-top: clamp(24px, 3vw, 36px);
+  padding-top: 20px;
+  border-top: 1px solid var(--hair);
+  font-size: clamp(16px, 1.5vw, 21px);
+  font-weight: 300;
+  color: var(--dim);
+}
+
+
+/* ══ 02 · ЛОКАЦИИ ══
+   Зоны сняты в разной ориентации: классика и циклорама горизонтально,
+   дофаминовая — вертикально. Три одинаковые карточки заставили бы
+   резать вертикаль пополам, поэтому зоны идут рядами: кадр живёт
+   в своей пропорции, а текст встаёт рядом и чередует сторону. */
+
+.zones__head { margin-bottom: clamp(40px, 6vw, 80px); }
+
+.zones {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(56px, 9vw, 132px);
+}
+
+.zone {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: clamp(24px, 4vw, 72px);
+  /* start, а не center: у дофаминовой зоны портретный кадр заметно выше
+     текстового блока, и центрирование подвешивало текст в пустоте
+     посередине длинного скролла. Сверху текст читается сразу у кадра. */
+  align-items: start;
+}
+.zone--tall { grid-template-columns: .78fr 1.22fr; }
+
+/* портретный кадр не должен раздуваться линейно с шириной широкой колонки —
+   на десктопе это превращало один снимок в полтора экрана скролла */
+.zone--tall .zone__open .ph { max-height: 78vh; }
+
+/* чередование: у второй зоны кадр справа */
+.zone--flip .zone__media { order: 2; }
+
+.zone__open {
+  position: relative;
+  display: block; width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+.zone__open .ph { transition: transform .8s var(--ease); }
+.zone__open:hover .ph { transform: scale(1.03); }
+
+/* ══ Стопка кадров ══
+   Одиночная картинка читалась как «фото всего одно». Поэтому под главным
+   кадром всегда лежит полоса из трёх миниатюр, а на последней написано,
+   сколько осталось. Ничего не прячем за ховер: на тач-экранах его нет. */
+
+.zone__media { display: flex; flex-direction: column; gap: 10px; }
+
+.zone__count {
+  position: absolute; right: 14px; top: 14px;
+  padding: 7px 15px;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
+  background: rgba(46, 38, 32, .74);
+  color: var(--ivory);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.zone__strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+/* У циклорамы кадров всего 3 — под полосу остаётся два, не три. Квадратная
+   сетка на 3 колонки резала бы их дважды (сперва под 3:2 в process.py, потом
+   ещё раз в квадрат CSS-кропом). Две широкие миниатюры на всю ширину читаются
+   спокойнее и по кадрированию совпадают с уже готовым исходником. */
+.zone__strip--pair { grid-template-columns: repeat(2, 1fr); }
+
+.zone__thumb { position: relative; display: block; overflow: hidden; }
+.zone__thumb .ph { transition: transform .5s var(--ease); }
+.zone__thumb:hover .ph { transform: scale(1.07); }
+
+.zone__thumb--more .ph { filter: brightness(.5); }
+.zone__more {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  color: var(--ivory);
+  font-size: clamp(15px, 1.4vw, 20px);
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.zone__idx {
+  font-size: var(--micro); font-weight: 500;
+  letter-spacing: .24em;
+  color: var(--dim);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--hair);
+  max-width: 3.4em;
+}
+
+.zone__name {
+  font-size: clamp(24px, 3vw, 42px);
+  font-weight: 400;
+  letter-spacing: -.02em;
+  margin-bottom: 8px;
+}
+
+/* без uppercase: «8 × 5 м» — единица измерения, а не рубрика,
+   капитель превращала бы её в «8 × 5 М» */
+.zone__size {
+  font-size: var(--micro); font-weight: 500;
+  letter-spacing: .18em;
+  color: var(--dim);
+  margin-bottom: 18px;
+}
+
+.zone__desc { color: var(--dim); max-width: 46ch; }
+
+.zone__tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.zone__tags li {
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  padding: 6px 13px;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  color: var(--dim);
+}
+
+
+/* ══ 03 · ЧТО ВХОДИТ ══ */
+
+.kit__head { margin-bottom: clamp(32px, 5vw, 60px); }
+
+.kit__cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(24px, 4vw, 64px);
+}
+
+.kit__title {
+  font-size: var(--micro); font-weight: 500;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--acc);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--hair);
+}
+.kit__title + .kit__list { margin-bottom: clamp(28px, 3.5vw, 44px); }
+
+.kit__list li {
+  display: flex; justify-content: space-between; gap: 16px;
+  padding: 9px 0;
+  font-size: clamp(14px, 1vw, 16px);
+  color: var(--fg);
+  border-bottom: 1px solid var(--hair);
+}
+.kit__list li span { color: var(--dim); white-space: nowrap; }
+
+.kit__note {
+  margin-top: clamp(28px, 4vw, 48px);
+  padding-top: 20px;
+  border-top: 1px solid var(--hair);
+  font-size: clamp(15px, 1.2vw, 18px);
+  font-weight: 300;
+  color: var(--dim);
+}
+
+
+/* ══ 04 · СТОИМОСТЬ ══ */
+
+.price__head { margin-bottom: clamp(28px, 4vw, 48px); }
+
+.price {
+  display: grid;
+  grid-template-columns: 1.35fr .85fr;
+  gap: clamp(26px, 4vw, 64px);
+  align-items: start;
+  max-width: 1040px;
+}
+
+.price__cat,
+.shooter__name {
+  font-size: var(--micro); font-weight: 500;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--dim);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--hair);
+  margin-bottom: 6px;
+}
+
+.price__row {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 24px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--hair);
+}
+.price__n { font-size: clamp(15px, 1.1vw, 17px); }
+.price__n em {
+  display: block;
+  font-style: normal;
+  font-size: 13px;
+  color: var(--dim);
+  margin-top: 3px;
+  max-width: 44ch;
+}
+.price__v {
+  font-size: clamp(16px, 1.3vw, 20px);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* фотографы */
+.shooters { margin-top: clamp(48px, 7vw, 96px); }
+.shooters__title {
+  font-size: clamp(22px, 2.4vw, 34px);
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+.shooters__lead { color: var(--dim); margin-bottom: clamp(26px, 3.5vw, 44px); }
+
+.shooters__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(22px, 3vw, 44px);
+  align-items: start;
+}
+
+.shooter__hd { margin-bottom: 4px; }
+.shooter__name {
+  font-size: clamp(19px, 1.7vw, 24px);
+  font-weight: 400;
+  letter-spacing: 0; text-transform: none;
+  color: var(--fg);
+  border: 0; padding: 0; margin: 0 0 4px;
+}
+.shooter__role {
+  font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--dim);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--hair);
+}
+/* ник в инстаграме регистрозависим на вид: @Marshall.raw_ нельзя
+   отдавать в капслок вместе с должностью */
+.shooter__at { text-transform: none; letter-spacing: .04em; }
+.shooter__quote {
+  font-size: 15px; font-weight: 300; line-height: 1.6;
+  color: var(--dim);
+  padding: 18px 0 4px;
+}
+
+
+/* ══ 05 · УСЛОВИЯ ══ */
+
+.rules__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 5vw, 88px);
+  align-items: start;
+}
+.rules__col .sec__title { font-size: clamp(24px, 2.6vw, 36px); margin-bottom: 26px; }
+
+.rules__list li {
+  position: relative;
+  padding: 0 0 16px 26px;
+  margin-bottom: 16px;
+  color: var(--dim);
+  border-bottom: 1px solid var(--hair);
+}
+.rules__list li::before {
+  content: ""; position: absolute; left: 4px; top: .68em;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--acc);
+}
+.rules__list li:last-child { border-bottom: 0; }
+
+.faq__item { padding: 0 0 16px; margin-bottom: 16px; border-bottom: 1px solid var(--hair); }
+.faq__item:last-child { border-bottom: 0; }
+.faq dt { font-weight: 500; margin-bottom: 6px; }
+.faq dd { color: var(--dim); }
+
+
+/* ══ 06 · КОНТАКТЫ ══ */
+
+.contacts__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 5vw, 88px);
+  align-items: start;
+}
+.contacts__col .sec__title { font-size: clamp(24px, 2.6vw, 36px); margin-bottom: 24px; }
+
+.contacts__addr {
+  font-style: normal;
+  font-size: clamp(18px, 1.7vw, 24px);
+  font-weight: 300;
+  line-height: 1.45;
+  margin-bottom: 24px;
+}
+.contacts__addr strong { font-weight: 500; }
+
+.contacts__hints li {
+  padding: 12px 0;
+  color: var(--dim);
+  border-bottom: 1px solid var(--hair);
+}
+.contacts__hints strong { color: var(--fg); font-weight: 500; }
+
+.contacts__links { margin-bottom: 22px; }
+.contacts__links li { border-bottom: 1px solid var(--hair); }
+.contacts__links a {
+  display: block;
+  padding: 13px 0;
+  font-size: clamp(16px, 1.3vw, 19px);
+  transition: color .25s var(--ease);
+}
+.contacts__links a:hover { color: var(--acc); }
+
+.contacts__hours { color: var(--dim); margin-bottom: 26px; max-width: 40ch; }
+
+
+/* ══ 06 · БРОНИРОВАНИЕ ══
+   Виджет их действующей системы во фрейме. Проверено: booking.booknow.ru
+   не отдаёт ни X-Frame-Options, ни CSP frame-ancestors, встраивание
+   легально с точки зрения самого сервиса. */
+
+.book__head { margin-bottom: clamp(28px, 4vw, 48px); }
+
+.book__wrap {
+  position: relative;
+  border: 1px solid var(--hair);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  /* пока фрейм грузится, полоса не должна схлопываться в ноль
+     и дёргать вёрстку под собой */
+  min-height: clamp(560px, 78vh, 880px);
+}
+
+.book__frame {
+  display: block;
+  width: 100%;
+  height: clamp(560px, 78vh, 880px);
+  border: 0;
+}
+
+.book__fallback {
+  margin-top: 18px;
+  font-size: 14px;
+  color: var(--dim);
+}
+.book__fallback a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.book__fallback a:hover { color: var(--acc); }
+
+
+/* ══ СЕРТИФИКАТ ══ */
+
+.gift {
+  padding: clamp(22px, 2.6vw, 34px);
+  border: 1px solid var(--hair);
+  border-radius: 4px;
+  background: rgba(46, 38, 32, .035);
+}
+.gift__tag {
+  font-size: var(--micro); font-weight: 500;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 14px;
+}
+.gift__sum {
+  font-size: clamp(28px, 3.4vw, 44px);
+  font-weight: 400; letter-spacing: -.02em;
+  margin-bottom: 8px;
+}
+.gift__meta { font-size: 14px; color: var(--dim); margin-bottom: 22px; }
+
+
+/* ══ ПОЛОСА С БАРЕЛЬЕФОМ ══ */
+
+.band { position: relative; height: clamp(180px, 26vw, 340px); overflow: hidden; }
+.band__ph { width: 100%; height: 100%; border: 0; object-fit: cover; }
+.ph.band__ph.is-set { height: 100%; }
+.band::after {
+  content: ""; position: absolute; inset: 0;
+  background: rgba(30, 24, 20, .46);
+}
+.band__line {
+  position: absolute; inset: 0; z-index: 1;
+  display: grid; place-items: center;
+  padding: 0 var(--pad);
+  text-align: center;
+  color: var(--ivory);
+  font-size: clamp(17px, 2.2vw, 30px);
+  font-weight: 300;
+}
+
+
+/* ══ 05 · ФОТОГРАФЫ ══ */
+
+.team__head { margin-bottom: clamp(32px, 5vw, 64px); }
+
+.team__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(26px, 3.6vw, 60px);
+  align-items: start;
+}
+
+.mate__ava {
+  width: clamp(84px, 8.5vw, 116px);
+  border-radius: 50%;
+  border: 0;
+  margin-bottom: 22px;
+}
+.mate__name {
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+.mate__role {
+  font-size: 12px; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 9px;
+}
+.mate__at {
+  font-size: 13px;
+  color: var(--dim);
+  text-decoration: underline; text-underline-offset: 3px;
+  transition: color .25s var(--ease);
+}
+.mate__at:hover { color: var(--fg); }
+
+.mate__quote {
+  margin: 20px 0 0;
+  font-size: 15px; font-weight: 300; line-height: 1.6;
+  color: var(--dim);
+}
+.mate__price { margin-top: 20px; border-top: 1px solid var(--hair); }
+
+
+/* ══ ФУТЕР ══ */
+
+.ftr {
+  background: var(--espresso);
+  color: rgba(244, 239, 230, .72);
+  padding: clamp(44px, 6vw, 76px) var(--pad) clamp(28px, 4vw, 44px);
+  border-top: 1px solid rgba(244, 239, 230, .14);
+}
+
+.ftr__top {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: clamp(28px, 4vw, 72px);
+  padding-bottom: clamp(30px, 4vw, 48px);
+}
+
+.ftr__logo {
+  font-size: 15px; font-weight: 500; letter-spacing: .24em;
+  color: var(--ivory);
+}
+.ftr__tagline {
+  margin-top: 10px;
+  font-size: 14px; font-weight: 300;
+  color: rgba(244, 239, 230, .66);
+  max-width: 24ch;
+}
+
+.ftr__nav, .ftr__contact { display: flex; flex-direction: column; gap: 11px; }
+.ftr__nav a, .ftr__contact a {
+  font-size: 14px;
+  color: rgba(244, 239, 230, .72);
+  transition: color .25s var(--ease);
+}
+.ftr__nav a:hover, .ftr__contact a:hover { color: var(--ivory); }
+.ftr__addr { margin-top: 6px; font-size: 13px; color: rgba(244, 239, 230, .66); }
+
+.ftr__legal {
+  display: grid; gap: 12px;
+  padding-top: clamp(22px, 3vw, 34px);
+  border-top: 1px solid rgba(244, 239, 230, .14);
+  font-size: 13px;
+  color: rgba(244, 239, 230, .66);
+}
+/* пометка о концепте — не декоративная мелочь, а то, что защищает
+   от прочтения страницы как официального сайта: держим её читаемой */
+.ftr__note { font-size: 12px; color: rgba(244, 239, 230, .62); }
+.ftr__by { font-size: 12px; color: rgba(244, 239, 230, .62); }
+.ftr__by a { color: var(--gold); border-bottom: 1px solid currentColor; }
+
+
+/* ══ ЛАЙТБОКС ══ */
+
+.lb {
+  position: fixed; inset: 0; z-index: 90;
+  display: flex; align-items: center; justify-content: center;
+  padding: clamp(56px, 8vh, 88px) clamp(16px, 6vw, 96px);
+  background: rgba(24, 19, 16, .96);
+}
+.lb[hidden] { display: none; }
+
+.lb__bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px clamp(16px, 4vw, 32px);
+  color: var(--ivory);
+}
+.lb__title { font-size: 14px; letter-spacing: .1em; text-transform: uppercase; }
+.lb__count { font-size: 13px; color: rgba(244, 239, 230, .55); margin-left: auto; }
+.lb__close {
+  font-size: 20px; line-height: 1;
+  color: var(--ivory);
+  padding: 8px 10px;
+  transition: opacity .25s var(--ease);
+}
+.lb__close:hover { opacity: .6; }
+
+.lb__stage {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; max-width: 1180px; max-height: 100%;
+}
+.lb__stage img,
+.lb__stage .ph {
+  max-width: 100%; max-height: 78svh;
+  width: auto;
+  object-fit: contain;
+}
+/* заглушка внутри лайтбокса должна иметь размер: у неё нет
+   собственных пикселей, поэтому задаём пропорцию явно */
+.lb__stage .ph { width: min(100%, 1000px); aspect-ratio: 3 / 2; }
+
+.lb__nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 2;
+  width: 52px; height: 52px;
+  font-size: 30px; line-height: 1;
+  color: var(--ivory);
+  background: rgba(244, 239, 230, .1);
+  border-radius: 50%;
+  transition: background .25s var(--ease);
+}
+.lb__nav:hover { background: rgba(244, 239, 230, .22); }
+.lb__nav--prev { left: clamp(8px, 2vw, 28px); }
+.lb__nav--next { right: clamp(8px, 2vw, 28px); }
+
+body.is-locked { overflow: hidden; }

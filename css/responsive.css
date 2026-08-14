@@ -1,0 +1,126 @@
+/* ══════════════════════════════════════════════════════
+   KING STUDIO — адаптив
+   Порядок брейкпоинтов: 1080 → 860 → 560
+   ══════════════════════════════════════════════════════ */
+
+/* ══ ≤1080: тройные сетки становятся двойными ══ */
+@media (max-width: 1080px) {
+
+  .kit__cols,
+  .team__grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* третья колонка «что входит» уходит вниз и занимает всю ширину:
+     пустая ячейка рядом читалась бы как недосмотр */
+  .kit__col:last-child { grid-column: 1 / -1; }
+
+  .about__grid { grid-template-columns: 1fr .8fr; }
+
+  .zone { grid-template-columns: 1fr .85fr; gap: clamp(20px, 3vw, 40px); }
+  .zone--tall { grid-template-columns: .7fr 1.3fr; }
+}
+
+
+/* ══ ≤860: одна колонка, шапка уходит в бургер ══ */
+@media (max-width: 860px) {
+
+  .hdr__cta { display: none; }
+
+  .hdr__burger {
+    display: flex; flex-direction: column; justify-content: center;
+    gap: 5px;
+    margin-left: auto;
+    width: 40px; height: 40px;
+    padding: 0 8px;
+  }
+  .hdr__burger span {
+    display: block; height: 1.5px; width: 100%;
+    background: var(--espresso);
+    transition: transform .3s var(--ease), opacity .3s var(--ease);
+  }
+  .hdr__burger[aria-expanded="true"] span:first-child { transform: translateY(3.25px) rotate(45deg); }
+  .hdr__burger[aria-expanded="true"] span:last-child  { transform: translateY(-3.25px) rotate(-45deg); }
+
+  .hdr__nav {
+    position: fixed; top: var(--hdr-h); left: 0; right: 0;
+    flex-direction: column; gap: 0;
+    margin-left: 0;
+    padding: 8px var(--pad) 24px;
+    background: var(--ivory);
+    border-bottom: 1px solid rgba(46, 38, 32, .1);
+    transform: translateY(-8px);
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .28s var(--ease), transform .28s var(--ease), visibility .28s;
+  }
+  .hdr__nav.is-open {
+    opacity: 1; visibility: visible; pointer-events: auto;
+    transform: none;
+  }
+  .hdr__nav a {
+    padding: 15px 0;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(46, 38, 32, .1);
+  }
+  .hdr__nav a:last-child { border-bottom: 0; }
+
+  .about__grid,
+  .kit__cols,
+  .team__grid,
+  .rules__grid,
+  .contacts__grid,
+  .price { grid-template-columns: 1fr; }
+
+  .ftr__top { grid-template-columns: 1fr; gap: 30px; }
+
+  /* зоны складываются в столбец: кадр сверху, текст под ним.
+     order у перевёрнутой зоны надо снять, иначе на телефоне
+     её описание окажется выше собственного кадра */
+  .zone,
+  .zone--tall { grid-template-columns: 1fr; gap: 22px; }
+  .zone--flip .zone__media { order: 0; }
+  .zones { gap: clamp(48px, 12vw, 72px); }
+
+  /* вертикальный кадр во всю ширину телефона занимал бы полтора экрана */
+  .zone--tall .ph--tall { aspect-ratio: 4 / 5; }
+  .about__media .ph--43 { aspect-ratio: 3 / 2; }
+
+  .hero { align-items: flex-end; min-height: 88svh; }
+  .hero__scroll { display: none; }
+
+  .book__wrap,
+  .book__frame { min-height: 0; height: clamp(520px, 80svh, 720px); }
+
+  .lb__nav { width: 44px; height: 44px; font-size: 26px; }
+  .lb__stage img, .lb__stage .ph { max-height: 66svh; }
+}
+
+
+/* ══ ≤560: мелкие правки под телефон ══ */
+@media (max-width: 560px) {
+
+  .hero__actions { flex-direction: column; align-items: stretch; }
+  .hero__actions .btn { text-align: center; }
+
+  .kit__list li { flex-direction: column; gap: 2px; }
+
+  /* на узком экране три миниатюры мельчают до нечитаемого — оставляем две
+     (первую и с бейджем «+N»). У циклорамы миниатюр всего две и бейджа
+     нет — обе значимые, прятать нечего. */
+  .zone__strip { grid-template-columns: repeat(2, 1fr); }
+  .zone__strip:not(.zone__strip--pair) .zone__thumb:nth-child(2) { display: none; }
+
+  .price__row { flex-direction: column; gap: 6px; }
+  .price__v { align-self: flex-start; }
+
+  .lb { padding: 64px 8px 16px; }
+  .lb__nav--prev { left: 4px; }
+  .lb__nav--next { right: 4px; }
+}
+
+
+/* ══ Тонкие экраны в ландшафте: герой не должен требовать скролла
+   ради собственного текста ══ */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero { min-height: auto; padding-top: 48px; padding-bottom: 48px; }
+  .hero__title { font-size: clamp(32px, 7vw, 56px); }
+  .hero__scroll { display: none; }
+}
