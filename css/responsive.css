@@ -69,10 +69,6 @@
   .contacts__grid,
   .price { grid-template-columns: 1fr; }
 
-  /* в одну колонку кадр больше не «правая половина» — вылет к правому
-     краю обрезал бы его несимметрично, только с одной стороны */
-  .about__media { margin-right: 0; }
-
   .ftr__top { grid-template-columns: 1fr; gap: 30px; }
 
   /* зоны складываются в столбец: кадр сверху, текст под ним.
