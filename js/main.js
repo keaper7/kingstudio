@@ -96,6 +96,51 @@
   }
 
 
+  /* ══ ПАРАЛЛАКС КАДРА «О СТУДИИ» ══
+
+     Кадр в css/sections.css выше своей рамки на 18% (.about__media .ph,
+     height:118%), а рамка вырезает лишнее через overflow:hidden — здесь
+     только сдвигаем кадр внутри этого запаса по мере скролля.
+
+     Диапазон считаем в пикселях от реальной высоты блока, а не берём
+     фиксированным числом: 18%-запас у CSS привязан к высоте, которая
+     меняется на каждом брейкпоинте (blok — от 1.35fr колонки), и
+     константа либо оставляла бы кадр недокрученным, либо утыкала бы
+     его в край раньше времени. */
+
+  (function () {
+    var wrap = document.querySelector('.about__media');
+    var img = wrap && wrap.querySelector('.ph');
+    if (!wrap || !img || reduced) return;
+
+    var ticking = false;
+
+    function update() {
+      var r = wrap.getBoundingClientRect();
+      var vh = window.innerHeight;
+
+      // 0 — блок ровно по центру экрана; ±1 — у дальнего края пути:
+      // кадр входит снизу, доходит до центра выровненным, уходит вверх
+      var travel = vh / 2 + r.height / 2;
+      var progress = travel ? (vh / 2 - (r.top + r.height / 2)) / travel : 0;
+      progress = Math.max(-1, Math.min(1, progress));
+
+      var range = r.height * 0.09; // запас ровно тот же, что height:118% даёт с каждой стороны
+      img.style.transform = 'translateY(' + (progress * range).toFixed(1) + 'px)';
+    }
+
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { ticking = false; update(); });
+    }, { passive: true });
+
+    window.addEventListener('resize', update);
+    window.addEventListener('load', update);
+    update();
+  })();
+
+
   /* ══ МОБИЛЬНОЕ МЕНЮ ══ */
 
   var burger = document.getElementById('burger');

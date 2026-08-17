@@ -69,6 +69,10 @@
   .contacts__grid,
   .price { grid-template-columns: 1fr; }
 
+  /* в одну колонку кадр больше не «правая половина» — вылет к правому
+     краю обрезал бы его несимметрично, только с одной стороны */
+  .about__media { margin-right: 0; }
+
   .ftr__top { grid-template-columns: 1fr; gap: 30px; }
 
   /* зоны складываются в столбец: кадр сверху, текст под ним.
@@ -87,7 +91,10 @@
 
   /* вертикальный кадр во всю ширину телефона занимал бы полтора экрана */
   .zone--tall .ph--tall { aspect-ratio: 4 / 5; }
-  .about__media .ph--43 { aspect-ratio: 3 / 2; }
+  /* пропорцию теперь держит обёртка .about__media (нужна для вылета и
+     параллакса), а не .ph--43 внутри нее — старое правило било мимо цели
+     и на мобильном кадр молча остался 4:3 вместо задуманного 3:2 */
+  .about__media { aspect-ratio: 3 / 2; }
 
   .hero { align-items: flex-end; min-height: 88svh; }
   .hero__scroll { display: none; }
